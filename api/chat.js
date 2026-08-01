@@ -116,6 +116,16 @@ export default async function handler(req, res) {
     if (!response.ok) {
       const errText = await response.text();
       console.error('Groq hata:', errText);
+
+      // Kota/istek limiti aşıldığında kullanıcıya anlaşılır, nazik bir
+      // mesaj göster — bunu normal bir cevap (200) olarak dönüyoruz ki
+      // frontend'deki genel hata metnini değil, bu mesajı göstersin.
+      if (response.status === 429) {
+        return res.status(200).json({
+          reply: 'Şu an biraz yoğunum (günlük ücretsiz kullanım sınırına yaklaşıldı) 🙏 Birkaç dakika sonra tekrar dener misin?'
+        });
+      }
+
       return res.status(response.status).json({ error: 'Groq API hatası', detail: errText });
     }
 

@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     const hasImage = messages.some(m =>
       Array.isArray(m.content) && m.content.some(part => part.type === 'image_url')
     );
-    const modelName = hasImage ? 'qwen/qwen3.6-27b' : 'llama-3.3-70b-versatile';
+    const modelName = hasImage ? 'qwen/qwen3.6-27b' : 'openai/gpt-oss-120b';
 
     const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
